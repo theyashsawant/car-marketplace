@@ -86,3 +86,23 @@ body {
 @media (max-width: 700px) {
   .detail-grid { grid-template-columns: 1fr; }
 }
+
+.form-page { max-width: 380px; margin: 40px auto; }
+.form-page h1 { font-size: 26px; margin-bottom: 24px; }
+.form-page form { display: flex; flex-direction: column; }
+.form-page label { font-size: 13px; color: #555; margin-bottom: 6px; }
+.form-page input, .form-page select {
+  padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px;
+  font-size: 15px; margin-bottom: 16px; font-family: inherit;
+}
+.form-page .primary { margin-top: 4px; }
+.form-page .primary:disabled { opacity: 0.6; cursor: default; }
+.error { color: #c0392b; font-size: 14px; margin-bottom: 12px; }
+.alt { margin-top: 18px; font-size: 14px; color: #666; text-align: center; }
+.alt a { color: #1a1a1a; }
+.user { margin-left: 20px; font-size: 15px; color: #555; }
+.link-btn {
+  margin-left: 20px; background: none; border: none; cursor: pointer;
+  font-size: 15px; color: #555; font-family: inherit; padding: 0;
+}
+.link-btn:hover { color: #1a1a1a; }

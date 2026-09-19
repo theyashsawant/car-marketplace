@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 
 function CarDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -50,9 +51,9 @@ function CarDetail() {
 
           {car.description && <p className="desc">{car.description}</p>}
 
-          <button className="primary" onClick={() => alert('Login coming in step 2')}>
-            {isRental ? 'Book this car' : 'Enquire now'}
-          </button>
+          <button className="primary" onClick={() => navigate(`/book/${car.id}`)}>
+  {isRental ? 'Book this car' : 'Enquire now'}
+</button>
         </div>
       </div>
     </div>

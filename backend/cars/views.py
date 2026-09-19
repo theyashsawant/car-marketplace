@@ -2,6 +2,11 @@ from rest_framework import viewsets
 from django.db.models import Q
 from .models import Car
 from .serializers import CarSerializer
+from rest_framework import generics, permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.contrib.auth.models import User
+from .serializers import RegisterSerializer, UserSerializer
 
 class CarViewSet(viewsets.ModelViewSet):
     serializer_class = CarSerializer
@@ -18,3 +23,15 @@ class CarViewSet(viewsets.ModelViewSet):
         if search:
             qs = qs.filter(Q(make__icontains=search) | Q(model__icontains=search))
         return qs
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = RegisterSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class MeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        return Response(UserSerializer(request.user).data)
