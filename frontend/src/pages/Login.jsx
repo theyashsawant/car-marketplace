@@ -10,40 +10,36 @@ function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
   const from = location.state?.from || '/';
 
   const submit = async (e) => {
     e.preventDefault();
-    setError('');
-    setBusy(true);
+    setError(''); setBusy(true);
     try {
       await login(username, password);
       navigate(from, { replace: true });
     } catch {
-      setError('Incorrect username or password.');
-    } finally {
-      setBusy(false);
-    }
+      setError('That username and password don’t match. Try again.');
+    } finally { setBusy(false); }
   };
 
   return (
-    <div className="form-page">
-      <h1>Log in</h1>
-      <form onSubmit={submit}>
-        <label>Username</label>
-        <input value={username} onChange={e => setUsername(e.target.value)} required />
-
-        <label>Password</label>
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-
-        {error && <p className="error">{error}</p>}
-
-        <button className="primary" disabled={busy}>
-          {busy ? 'Logging in…' : 'Log in'}
-        </button>
-      </form>
-      <p className="alt">No account? <Link to="/register">Register</Link></p>
+    <div className="wrap">
+      <div className="form-page">
+        <h1>Welcome back</h1>
+        <p className="sub">Log in to manage your bookings and listings.</p>
+        <form onSubmit={submit}>
+          <label>Username</label>
+          <input value={username} onChange={e => setUsername(e.target.value)} required />
+          <label>Password</label>
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+          {error && <p className="error">{error}</p>}
+          <button className="btn btn-primary btn-block" disabled={busy}>
+            {busy ? 'Logging in…' : 'Log in'}
+          </button>
+        </form>
+        <p className="alt">New here? <Link to="/register">Create an account</Link></p>
+      </div>
     </div>
   );
 }

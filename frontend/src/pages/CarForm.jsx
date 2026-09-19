@@ -48,96 +48,95 @@ function CarForm() {
   if (loading) return <p className="empty">Loading…</p>;
 
   return (
-    <div className="form-page wide">
-      <Link to="/dashboard" className="back">← Back to my listings</Link>
-      <h1>{isEdit ? 'Edit listing' : 'Add a car'}</h1>
+    <div className="wrap">
+      <div className="form-page wide">
+        <p className="crumb"><Link to="/dashboard">Back to my listings</Link></p>
+        <h1>{isEdit ? 'Edit listing' : 'List a car'}</h1>
+        <p className="sub">Our team reviews every listing before it appears on the site.</p>
 
-      <form onSubmit={submit}>
-        <label>Listing type</label>
-        <select value={form.type} onChange={update('type')}>
-          <option value="rental">Rental — by the day</option>
-          <option value="resale">Used car — for sale</option>
-        </select>
+        <form onSubmit={submit}>
+          <label>Listing type</label>
+          <select value={form.type} onChange={update('type')}>
+            <option value="rental">Rental — priced per day</option>
+            <option value="resale">Used car — for sale</option>
+          </select>
 
-        <div className="two-col">
-          <div>
-            <label>Make</label>
-            <input value={form.make} onChange={update('make')}
-                   placeholder="Suzuki" required />
+          <div className="two-col">
+            <div>
+              <label>Make</label>
+              <input value={form.make} onChange={update('make')} placeholder="Suzuki" required />
+            </div>
+            <div>
+              <label>Model</label>
+              <input value={form.model} onChange={update('model')} placeholder="Swift" required />
+            </div>
           </div>
-          <div>
-            <label>Model</label>
-            <input value={form.model} onChange={update('model')}
-                   placeholder="Swift" required />
+
+          <div className="two-col">
+            <div>
+              <label>Registration year</label>
+              <input type="number" min="1990" max="2030"
+                     value={form.year} onChange={update('year')} required />
+            </div>
+            <div>
+              <label>{form.type === 'rental' ? 'Price per day (₹)' : 'Asking price (₹)'}</label>
+              <input type="number" min="0" step="0.01"
+                     value={form.price} onChange={update('price')} required />
+            </div>
           </div>
-        </div>
 
-        <div className="two-col">
-          <div>
-            <label>Year</label>
-            <input type="number" min="1990" max="2030"
-                   value={form.year} onChange={update('year')} required />
+          <div className="two-col">
+            <div>
+              <label>Fuel</label>
+              <select value={form.fuel_type} onChange={update('fuel_type')}>
+                <option value="petrol">Petrol</option>
+                <option value="diesel">Diesel</option>
+                <option value="cng">CNG</option>
+                <option value="electric">Electric</option>
+              </select>
+            </div>
+            <div>
+              <label>Transmission</label>
+              <select value={form.transmission} onChange={update('transmission')}>
+                <option value="manual">Manual</option>
+                <option value="automatic">Automatic</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <label>{form.type === 'rental' ? 'Price per day (₹)' : 'Asking price (₹)'}</label>
-            <input type="number" min="0" step="0.01"
-                   value={form.price} onChange={update('price')} required />
+
+          <div className="two-col">
+            <div>
+              <label>Kilometres driven</label>
+              <input type="number" min="0" value={form.km_driven} onChange={update('km_driven')} />
+            </div>
+            <div>
+              <label>Seats</label>
+              <input type="number" min="2" max="10" value={form.seats} onChange={update('seats')} />
+            </div>
           </div>
-        </div>
 
-        <div className="two-col">
-          <div>
-            <label>Fuel</label>
-            <select value={form.fuel_type} onChange={update('fuel_type')}>
-              <option value="petrol">Petrol</option>
-              <option value="diesel">Diesel</option>
-              <option value="cng">CNG</option>
-              <option value="electric">Electric</option>
-            </select>
-          </div>
-          <div>
-            <label>Transmission</label>
-            <select value={form.transmission} onChange={update('transmission')}>
-              <option value="manual">Manual</option>
-              <option value="automatic">Automatic</option>
-            </select>
-          </div>
-        </div>
+          <label>City</label>
+          <input value={form.city} onChange={update('city')} required />
 
-        <div className="two-col">
-          <div>
-            <label>KM driven</label>
-            <input type="number" min="0" value={form.km_driven}
-                   onChange={update('km_driven')} />
-          </div>
-          <div>
-            <label>Seats</label>
-            <input type="number" min="2" max="10" value={form.seats}
-                   onChange={update('seats')} />
-          </div>
-        </div>
+          <label>Photo URL</label>
+          <input value={form.image_url || ''} onChange={update('image_url')}
+                 placeholder="https://example.com/car.jpg" />
 
-        <label>City</label>
-        <input value={form.city} onChange={update('city')} required />
+          <label>Description</label>
+          <textarea rows={3} value={form.description} onChange={update('description')}
+                    placeholder="Single owner, full service history, new tyres…" />
 
-        <label>Photo URL</label>
-        <input value={form.image_url || ''} onChange={update('image_url')}
-               placeholder="https://example.com/car.jpg" />
+          {error && <p className="error">{error}</p>}
 
-        <label>Description</label>
-        <textarea rows={3} value={form.description} onChange={update('description')}
-                  placeholder="Single owner, full service history…" />
+          <p className="hint">
+            New and edited listings go for review before they appear on the site.
+          </p>
 
-        {error && <p className="error">{error}</p>}
-
-        <p className="hint">
-          New and edited listings go to our team for review before appearing on the site.
-        </p>
-
-        <button className="primary" disabled={busy}>
-          {busy ? 'Saving…' : isEdit ? 'Save changes' : 'Submit for review'}
-        </button>
-      </form>
+          <button className="btn btn-primary btn-block" disabled={busy}>
+            {busy ? 'Saving…' : isEdit ? 'Save changes' : 'Submit for review'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -34,48 +34,60 @@ function MyBookings() {
   if (loading) return <p className="empty">Loading…</p>;
 
   return (
-    <div className="listing">
-      <h1 className="page-title">My activity</h1>
+    <div className="wrap">
+      <div className="page-pad">
+        <div className="dash-head">
+          <h1>My activity</h1>
+        </div>
 
-      <div className="tabs">
-        <button className={tab === 'bookings' ? 'active' : ''}
-                onClick={() => setTab('bookings')}>
-          Bookings ({bookings.length})
-        </button>
-        <button className={tab === 'enquiries' ? 'active' : ''}
-                onClick={() => setTab('enquiries')}>
-          Enquiries ({enquiries.length})
-        </button>
-      </div>
+        <div className="tabs">
+          <button className={tab === 'bookings' ? 'active' : ''} onClick={() => setTab('bookings')}>
+            Bookings ({bookings.length})
+          </button>
+          <button className={tab === 'enquiries' ? 'active' : ''} onClick={() => setTab('enquiries')}>
+            Enquiries ({enquiries.length})
+          </button>
+        </div>
 
-      {tab === 'bookings' && (
-        bookings.length === 0
-          ? <p className="empty">No bookings yet. <Link to="/cars?type=rental">Find a car to rent</Link></p>
-          : <div className="rows">
+        {tab === 'bookings' && (
+          bookings.length === 0 ? (
+            <p className="empty">
+              No bookings yet. <Link to="/cars?type=rental">Find a car to rent</Link>
+            </p>
+          ) : (
+            <div className="rows">
               {bookings.map(b => (
                 <div className="row" key={b.id}>
                   <div>
                     <Link to={`/cars/${b.car}`} className="row-title">
                       {b.car_detail.year} {b.car_detail.make} {b.car_detail.model}
                     </Link>
-                    <p className="meta">{fmt(b.start_date)} → {fmt(b.end_date)}</p>
+                    <p className="meta">{fmt(b.start_date)} to {fmt(b.end_date)}</p>
                   </div>
                   <div className="row-right">
                     <span className={`status ${b.status}`}>{b.status}</span>
                     <p className="price">₹{Number(b.total_price).toLocaleString('en-IN')}</p>
                     {['pending', 'confirmed'].includes(b.status) && (
-                      <button className="link-btn danger" onClick={() => cancel(b.id)}>Cancel</button>
+                      <div className="row-actions">
+                        <button className="link-btn danger" onClick={() => cancel(b.id)}>
+                          Cancel booking
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
               ))}
             </div>
-      )}
+          )
+        )}
 
-      {tab === 'enquiries' && (
-        enquiries.length === 0
-          ? <p className="empty">No enquiries yet. <Link to="/cars?type=resale">Browse used cars</Link></p>
-          : <div className="rows">
+        {tab === 'enquiries' && (
+          enquiries.length === 0 ? (
+            <p className="empty">
+              No enquiries yet. <Link to="/cars?type=resale">Browse used cars</Link>
+            </p>
+          ) : (
+            <div className="rows">
               {enquiries.map(e => (
                 <div className="row" key={e.id}>
                   <div>
@@ -91,7 +103,9 @@ function MyBookings() {
                 </div>
               ))}
             </div>
-      )}
+          )
+        )}
+      </div>
     </div>
   );
 }

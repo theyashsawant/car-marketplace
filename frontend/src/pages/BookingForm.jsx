@@ -31,11 +31,7 @@ function BookingForm() {
     setError('');
     setBusy(true);
     try {
-      await api.post('bookings/', {
-        car: carId,
-        start_date: start,
-        end_date: end,
-      });
+      await api.post('bookings/', { car: carId, start_date: start, end_date: end });
       navigate('/my-bookings');
     } catch (err) {
       const data = err.response?.data;
@@ -50,37 +46,45 @@ function BookingForm() {
   if (!car) return <p className="empty">Car not found.</p>;
 
   return (
-    <div className="form-page wide">
-      <Link to={`/cars/${carId}`} className="back">← Back to car</Link>
-      <h1>Book this car</h1>
+    <div className="wrap">
+      <div className="form-page wide">
+        <p className="crumb"><Link to={`/cars/${carId}`}>Back to this car</Link></p>
+        <h1>Confirm your dates</h1>
+        <p className="sub">We’ll hold the car once your booking is in.</p>
 
-      <div className="summary">
-        <strong>{car.year} {car.make} {car.model}</strong>
-        <span>₹{Number(car.price).toLocaleString('en-IN')} / day</span>
-      </div>
+        <div className="summary">
+          <strong>{car.year} {car.make} {car.model}</strong>
+          <span>₹{Number(car.price).toLocaleString('en-IN')} per day</span>
+        </div>
 
-      <form onSubmit={submit}>
-        <label>Pick-up date</label>
-        <input type="date" min={today} value={start}
-               onChange={e => setStart(e.target.value)} required />
-
-        <label>Return date</label>
-        <input type="date" min={start || today} value={end}
-               onChange={e => setEnd(e.target.value)} required />
-
-        {days > 0 && (
-          <div className="total-box">
-            <span>{days} {days === 1 ? 'day' : 'days'}</span>
-            <strong>₹{total.toLocaleString('en-IN')}</strong>
+        <form onSubmit={submit}>
+          <div className="two-col">
+            <div>
+              <label>Pick-up date</label>
+              <input type="date" min={today} value={start}
+                     onChange={e => setStart(e.target.value)} required />
+            </div>
+            <div>
+              <label>Return date</label>
+              <input type="date" min={start || today} value={end}
+                     onChange={e => setEnd(e.target.value)} required />
+            </div>
           </div>
-        )}
 
-        {error && <p className="error">{error}</p>}
+          {days > 0 && (
+            <div className="total-box">
+              <span>{days} {days === 1 ? 'day' : 'days'} × ₹{Number(car.price).toLocaleString('en-IN')}</span>
+              <strong>₹{total.toLocaleString('en-IN')}</strong>
+            </div>
+          )}
 
-        <button className="primary" disabled={busy || days < 1}>
-          {busy ? 'Confirming…' : 'Confirm booking'}
-        </button>
-      </form>
+          {error && <p className="error">{error}</p>}
+
+          <button className="btn btn-primary btn-block" disabled={busy || days < 1}>
+            {busy ? 'Confirming…' : 'Confirm booking'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
