@@ -1,33 +1,27 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import CarListing from './pages/CarListing';
+import CarDetail from './pages/CarDetail';
 
 function App() {
-  const [cars, setCars] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    axios.get('http://localhost:8000/api/cars/')
-      .then(res => {
-        setCars(res.data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) return <p>Loading...</p>;
-
   return (
-    <div>
-      <h1>Cars</h1>
-      {cars.map(car => (
-        <div key={car.id}>
-          <h3>{car.year} {car.make} {car.model}</h3>
-          <p>{car.type} — ₹{car.price} — {car.city}</p>
+    <div className="app">
+      <nav className="nav">
+        <Link to="/" className="logo">CarMarket</Link>
+        <div className="nav-links">
+          <Link to="/cars?type=rental">Rent</Link>
+          <Link to="/cars?type=resale">Buy used</Link>
         </div>
-      ))}
+      </nav>
+
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/cars" element={<CarListing />} />
+          <Route path="/cars/:id" element={<CarDetail />} />
+          <Route path="*" element={<p className="empty">Page not found.</p>} />
+        </Routes>
+      </main>
     </div>
   );
 }
