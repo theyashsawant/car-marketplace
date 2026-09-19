@@ -6,6 +6,9 @@ import CarListing from './pages/CarListing';
 import CarDetail from './pages/CarDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import BookingForm from './pages/BookingForm';
+import EnquiryForm from './pages/EnquiryForm';
+import MyBookings from './pages/MyBookings';
 
 function App() {
   const { user, logout } = useAuth();
@@ -24,7 +27,7 @@ function App() {
           <Link to="/cars?type=rental">Rent</Link>
           <Link to="/cars?type=resale">Buy used</Link>
           {user ? (
-            <>
+            <><Link to="/my-bookings">My bookings</Link>
               <span className="user">Hi, {user.username}</span>
               <button className="link-btn" onClick={handleLogout}>Log out</button>
             </>
@@ -45,7 +48,13 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/book/:carId" element={
-            <ProtectedRoute><p className="empty">Booking form comes in step 3.</p></ProtectedRoute>
+          <ProtectedRoute><BookingForm /></ProtectedRoute>
+          } />
+          <Route path="/enquire/:carId" element={
+          <ProtectedRoute><EnquiryForm /></ProtectedRoute>
+          } />
+          <Route path="/my-bookings" element={
+          <ProtectedRoute><MyBookings /></ProtectedRoute>
           } />
           <Route path="*" element={<p className="empty">Page not found.</p>} />
         </Routes>

@@ -1,7 +1,9 @@
 from rest_framework import serializers
+from .models import Car, UserProfile, Booking, Enquiry
 from .models import Car
 from django.contrib.auth.models import User
 from .models import UserProfile
+
 
 class CarSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,3 +37,53 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'role', 'phone')
+
+class BookingSerializer(serializers.ModelSerializer):
+    car_detail = CarSerializer(source='car', read_only=True)
+
+    class Meta:
+        model = Booking
+        fields = ('id', 'car', 'car_detail', 'start_date', 'end_date',
+                  'total_price', 'status', 'created_at')
+        read_only_fields = ('total_price', 'status')
+
+    def validate(self, data):
+        car = data['car']
+        start, end = data['start_date'], data['end_date']
+
+        if car.type != 'rental':
+            raise serializers.ValidationError('This car is not available for rental.')
+        if end <= start:
+            raise serializers.ValidationError('End date must be after start date.')
+
+        clash = Booking.objects.filter(
+            car=car,
+            status__in=['pending', 'confirmed'],
+            start_date__lt=end,
+            end_date__gt=start,
+        ).exists()
+        if clash:
+            raise serializers.ValidationError('This car is already booked for those dates.')
+
+        return data
+
+    def create(self, validated_data):
+        car = validated_data['car']
+        days = (validated_data['end_date'] - validated_data['start_date']).days
+        validated_data['total_price'] = car.price * days
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
+
+
+class EnquirySerializer(serializers.ModelSerializer):
+    car_detail = CarSerializer(source='car', read_only=True)
+
+    class Meta:
+        model = Enquiry
+        fields = ('id', 'car', 'car_detail', 'message', 'contact_phone',
+                  'status', 'created_at')
+        read_only_fields = ('status',)
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)

@@ -2,10 +2,13 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from cars.views import CarViewSet, RegisterView, MeView
+from cars.views import CarViewSet, RegisterView, MeView, BookingViewSet, EnquiryViewSet
 
 router = DefaultRouter()
 router.register('cars', CarViewSet, basename='car')
+router.register('bookings', BookingViewSet, basename='booking')
+router.register('enquiries', EnquiryViewSet, basename='enquiry')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

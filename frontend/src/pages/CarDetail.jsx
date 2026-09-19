@@ -51,7 +51,8 @@ function CarDetail() {
 
           {car.description && <p className="desc">{car.description}</p>}
 
-          <button className="primary" onClick={() => navigate(`/book/${car.id}`)}>
+          <button className="primary"
+        onClick={() => navigate(isRental ? `/book/${car.id}` : `/enquire/${car.id}`)}>
   {isRental ? 'Book this car' : 'Enquire now'}
 </button>
         </div>
