@@ -6,9 +6,13 @@ from .models import UserProfile
 
 
 class CarSerializer(serializers.ModelSerializer):
+    owner_name = serializers.CharField(source='owner.username', read_only=True)
+
     class Meta:
         model = Car
         fields = '__all__'
+        read_only_fields = ('owner', 'status', 'rejection_reason',
+                            'reviewed_by', 'reviewed_at')
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)

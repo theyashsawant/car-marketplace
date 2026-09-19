@@ -150,3 +150,29 @@ body {
 
 .danger { color: #c0392b; margin-left: 0; margin-top: 8px; display: block; }
 .danger:hover { color: #922b21; }
+
+.dash-head {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 24px;
+}
+.btn-link { text-decoration: none; display: inline-block; font-size: 14px; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.two-col > div { display: flex; flex-direction: column; }
+
+.row-actions { margin-top: 8px; display: flex; gap: 14px; justify-content: flex-end; }
+.row-actions .link-btn, .row-actions a {
+  margin-left: 0; font-size: 14px; text-decoration: none;
+}
+.danger.inline { display: inline; margin-top: 0; }
+
+.reject-note { color: #c0392b; font-size: 13px; margin-top: 6px; }
+.hint { font-size: 13px; color: #777; margin-bottom: 14px; }
+
+.status.approved { background: #d1fae5; color: #065f46; }
+.status.rejected { background: #fee2e2; color: #991b1b; }
+.status.draft, .status.inactive { background: #e5e7eb; color: #374151; }
+
+@media (max-width: 600px) {
+  .two-col { grid-template-columns: 1fr; }
+}

@@ -23,6 +23,21 @@ class Car(models.Model):
     description = models.TextField(blank=True)
     image_url = models.URLField(blank=True, null=True)
     available = models.BooleanField(default=True)
+    STATUS = [
+        ('draft', 'Draft'),
+        ('pending', 'Pending review'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+        ('inactive', 'Inactive'),
+    ]
+    owner = models.ForeignKey(User, on_delete=models.CASCADE,
+                              related_name='cars', null=True, blank=True)
+    status = models.CharField(max_length=10, choices=STATUS, default='pending')
+    rejection_reason = models.TextField(blank=True)
+    reviewed_by = models.ForeignKey(User, null=True, blank=True,
+                                    on_delete=models.SET_NULL,
+                                    related_name='reviewed_cars')
+    reviewed_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
